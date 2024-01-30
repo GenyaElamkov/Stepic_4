@@ -21,38 +21,8 @@ matrix = [[1] * size for _ in range(size)]
 
 for i in range(size):
     for j in range(size):
-        if size <= 2:
-            matrix[i][j] = 1
-
-        if i == size - i - 1 and j == size - j - 1:
-            matrix[i][j] = size - i
-
-
-        if i == j + 1 or  j == i + 1:
-            matrix[i][j] = size - j
-
-        # if i < j and size - 1 - j:
-        #     matrix[i][j] = 2
-
-        # if i > j and size - 1 - j:
-        #     matrix[i][j] = size - i
-
-        # if i < j and i > size - 1 - j:
-        #     matrix[i][j] = 2
-
-        # if i > j and i > size - 1 - j:
-        #     matrix[i][j] = 2
-
-        # if j == size - 1 - i:
-        #     matrix[i][j] = 1
-        # if i == j or j == size - i - 1:
-        #     matrix[i][j] = 2
-
-        # if i + 1 == size - i:
-        #     matrix[i][j] = size - i
-        
-        # if j + 1 == size - l:
-        #     matrix[i][j] = size - i
+        if i == i + 1:
+            
             
     
 
