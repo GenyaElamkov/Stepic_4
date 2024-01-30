@@ -11,34 +11,49 @@ https://stepik.org/lesson/794484/step/17?unit=797232
 """
 
 
-def pluck(data: dict, path: str, default=None):
-    # if path in data:
-    #     return data[path]
+def pluck(data: dict, path: str, default="None"):
+    if path in data:
+        return data[path]
 
-    # for val in data.values():
-    #     if isinstance(val, dict):
-    #         val = pluck(val, path)
-    #     if val is not None:
-    #         return val
-
-    for k in path.split('.'):
-        if isinstance(data[k], dict):
-            return pluck(data[k], k)
-        return data[k]
-    
-
-
-
-
+    path = path.split(".")
+    for _ in data:
+        try:
+            if isinstance(data[path[0]], dict):
+                data = data[path[0]]
+                del path[0]
+                return pluck(data, ".".join(path), default)
+        except KeyError:
+            return default
 
 
 if __name__ == "__main__":
-    d = {'a': {'b': 5, 'z': 20}, 'c': {'d': 3}, 'x': 40}
-    print(pluck(d, 'x'))
+    d = {"a": {"b": 5, "z": 20}, "c": {"d": 3}, "x": 40}
+    print(pluck(d, "x"))
 
-    d = {'a': {'b': 5, 'z': 20}, 'c': {'d': 3}, 'x': 40}
-    print(pluck(d, 'a.b'))
+    d = {"a": {"b": 5, "z": 20}, "c": {"d": 3}, "x": 40}
+    print(pluck(d, "a.b"))
 
-    d = {'a': {'b': {'c': {'d': {'e': 4}}}}}
+    d = {"a": {"b": {"c": {"d": {"e": 4}}}}}
+    print(pluck(d, "a.b.c"))
 
-    print(pluck(d, 'a.b.c'))
+    d = {"a": {"b": 5, "z": 20}, "c": {"d": 3}, "x": 40}
+    print(pluck(d, "c.d"))
+
+    d = {"a": {"b": 5, "z": 20}, "c": {"d": 3}, "x": 40}
+    print(pluck(d, "c.e"))
+
+    d = {
+        "firstname": "Тимур",
+        "lastname": "Гуев",
+        "birthdate": {"day": 10, "month": "October", "year": 1993},
+        "address": {
+            "streetaddress": "Часовая 25, кв. 127",
+            "city": {
+                "region": "Московская область",
+                "type": "город",
+                "cityname": "Москва",
+            },
+            "postalcode": "125315",
+        },
+    }
+    print(pluck(d, "birthdate.weekday", default="Not found"))
