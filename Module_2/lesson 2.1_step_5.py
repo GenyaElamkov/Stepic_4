@@ -21,7 +21,7 @@ import re
 def couple(text: str) -> bool:
     if text == "()" or not text:
         return True
-    try: 
+    try:
         text = re.sub(r"\B\(\)\B", r"", text)
         return couple(text)
     except RecursionError:
@@ -41,10 +41,11 @@ print(couple(t))
 brackets = input()
 stack = []
 
+
 def check_brackets(brackets: str) -> bool:
     stack = []
     for symbol in brackets:
-        if symbol == '(':
+        if symbol == "(":
             stack.append(symbol)
         else:
             if len(stack) == 0:
@@ -55,5 +56,6 @@ def check_brackets(brackets: str) -> bool:
         return False
     else:
         return True
+
 
 print(check_brackets(brackets))
