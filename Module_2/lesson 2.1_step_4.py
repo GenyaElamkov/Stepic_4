@@ -15,17 +15,12 @@
 https://stepik.org/lesson/794484/step/4?unit=797232
 """
 
-size = 5
-
+size = int(input())
 matrix = [[1] * size for _ in range(size)]
 
 for i in range(size):
     for j in range(size):
-        if i == i + 1:
-            
-            
-    
-
+        matrix[i][j] = min([i + 1, j + 1, size - i, size - j])
 
 for row in matrix:
     print(*row)

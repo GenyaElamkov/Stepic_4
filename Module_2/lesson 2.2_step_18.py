@@ -12,49 +12,69 @@ https://stepik.org/lesson/794484/step/18?unit=797232
 """
 
 
-def pluck(data: dict, path: str, default="None"):
-    if path in data:
-        return data[path]
-
-    path = path.split(".")
-    for _ in data:
-        try:
-            if isinstance(data[path[0]], dict):
-                data = data[path[0]]
-                del path[0]
-                return pluck(data, ".".join(path), default)
-        except KeyError:
-            return default
+import functools
 
 
-if __name__ == "__main__":
-    d = {"a": {"b": 5, "z": 20}, "c": {"d": 3}, "x": 40}
-    print(pluck(d, "x"))
+def recviz(func):
+    cnt = -1
 
-    d = {"a": {"b": 5, "z": 20}, "c": {"d": 3}, "x": 40}
-    print(pluck(d, "a.b"))
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        nonlocal cnt
+        arg = ", ".join([repr(x) for x in args])
+        kwarg = ", ".join(["=".join([str(k), repr(v)]) for k, v in kwargs.items()])
+        cnt += 1
+        if kwargs:
+            print(f"{' ' * 4 * cnt}-> {func.__name__}({arg}, {kwarg})")
+        else:
+            print(f"{' ' * 4 * cnt}-> {func.__name__}({arg})")
+        val = func(*args, **kwargs)
+        print(f"{' ' * 4 * cnt}<- {repr(val)}")
+        cnt -= 1
 
-    d = {"a": {"b": {"c": {"d": {"e": 4}}}}}
-    print(pluck(d, "a.b.c"))
+        return val
 
-    d = {"a": {"b": 5, "z": 20}, "c": {"d": 3}, "x": 40}
-    print(pluck(d, "c.d"))
+    return wrapper
 
-    d = {"a": {"b": 5, "z": 20}, "c": {"d": 3}, "x": 40}
-    print(pluck(d, "c.e"))
 
-    d = {
-        "firstname": "Тимур",
-        "lastname": "Гуев",
-        "birthdate": {"day": 10, "month": "October", "year": 1993},
-        "address": {
-            "streetaddress": "Часовая 25, кв. 127",
-            "city": {
-                "region": "Московская область",
-                "type": "город",
-                "cityname": "Москва",
-            },
-            "postalcode": "125315",
-        },
-    }
-    print(pluck(d, "birthdate.weekday", default="Not found"))
+@recviz
+def add(a, b):
+    return a + b
+
+
+add(1, b=2)
+
+"""
+-> add(1, b=2)
+<- 3
+"""
+
+
+@recviz
+def add(a, b, c, d, e):
+    return (a + b + c) * (d + e)
+
+
+add("a", b="b", c="c", d=3, e=True)
+
+
+@recviz
+def fib(n):
+    if n <= 2:
+        return 1
+    else:
+        return fib(n - 1) + fib(n - 2)
+
+
+fib(4)
+
+
+@recviz
+def fact(n):
+    if n == 0:
+        return 1
+    else:
+        return n * fact(n - 1)
+
+
+fact(5)
