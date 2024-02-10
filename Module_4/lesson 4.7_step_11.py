@@ -1,27 +1,14 @@
-class Rectangle:
-    def __init__(self, length, width) -> None:
-        self._length = length
-        self._width = width
+class Circle:
+    def __init__(self, radius) -> None:
+        self.radius = radius
 
     @classmethod
-    def square(cls, side) -> classmethod:
-        return cls(length=side, width=side)
-
-    @property
-    def length(self) -> int | float:
-        return self._length
-
-    @property
-    def width(self) -> int | float:
-        return self._width
+    def from_diameter(cls, diametr):
+        return cls(diametr / 2)
 
 
-rectangle = Rectangle(4, 5)
+circle = Circle(5)
+print(circle.radius)
 
-print(rectangle.length)
-print(rectangle.width)
-
-rectangle = Rectangle.square(5)
-
-print(rectangle.length)
-print(rectangle.width)
+circle = Circle.from_diameter(10)
+print(circle.radius)

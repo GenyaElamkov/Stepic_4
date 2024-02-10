@@ -1,27 +1,37 @@
-from string import punctuation, digits, whitespace
+class Pet:
+    arr = []
+
+    def __init__(self, name=None) -> None:
+        self.name = name
+        __cla.arr.append(self)
+
+    @classmethod
+    def first_pet(cls):
+        try:
+            return cls.arr[0]
+        except IndexError:
+            return None
+
+    @classmethod
+    def last_pet(cls):
+        try:
+            return cls.arr[-1]
+        except IndexError:
+            return None
+
+    @classmethod
+    def num_of_pets(cls):
+        return len(cls.arr)
 
 
-class StrExtension:
-    @staticmethod
-    def remove_vowels(string: str) -> str:
-        chars = "aeiouyAEIOUY"
-        return string.translate({ord(i): None for i in chars})
+print(Pet.first_pet())
+print(Pet.last_pet())
+print(Pet.num_of_pets())
 
-    @staticmethod
-    def leave_alpha(string: str) -> str:
-        return string.translate({ord(i): None for i in punctuation + digits + whitespace})
+pet1 = Pet("Ratchet")
+pet2 = Pet("Clank")
+pet3 = Pet("Rivet")
 
-    @staticmethod
-    def replace_all(string, chars, char) -> str:
-        return string.translate({ord(i): char for i in chars})
-
-
-print(StrExtension.remove_vowels("Python"))
-print(StrExtension.remove_vowels("Stepik"))
-print(StrExtension.leave_alpha("Python111"))
-print(StrExtension.leave_alpha("__Stepik__()"))
-
-print(StrExtension.replace_all("Python", "Ptn", "-"))
-print(StrExtension.replace_all("Stepik", "stk", "#"))
-print(StrExtension.leave_alpha('beegeek!\"#$%&\'()*+, -./:;<=>?@[\]^_`{|}~BEEGEEK'))
-print(StrExtension.leave_alpha('beegeek0123456789BEEGEEK'))
+print(Pet.first_pet().name)
+print(Pet.last_pet().name)
+print(Pet.num_of_pets())

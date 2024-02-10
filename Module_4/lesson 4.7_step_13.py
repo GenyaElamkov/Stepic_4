@@ -1,37 +1,33 @@
-class Pet:
-    arr = []
-
-    def __init__(self, name=None) -> None:
-        self.name = name
-        __cla.arr.append(self)
-
-    @classmethod
-    def first_pet(cls):
-        try:
-            return cls.arr[0]
-        except IndexError:
-            return None
+class QuadraticPolynomial:
+    def __init__(self, a, b, c) -> None:
+        self.a = a
+        self.b = b
+        self.c = c
 
     @classmethod
-    def last_pet(cls):
-        try:
-            return cls.arr[-1]
-        except IndexError:
-            return None
+    def from_iterable(cls, iterable):
+        return cls(*iterable)
 
     @classmethod
-    def num_of_pets(cls):
-        return len(cls.arr)
+    def from_str(cls, string) -> float:
+        return cls(*map(float, string.split()))
 
 
-print(Pet.first_pet())
-print(Pet.last_pet())
-print(Pet.num_of_pets())
+# polynom = QuadraticPolynomial(1, -5, 6)
 
-pet1 = Pet("Ratchet")
-pet2 = Pet("Clank")
-pet3 = Pet("Rivet")
+# print(polynom.a)
+# print(polynom.b)
+# print(polynom.c)
 
-print(Pet.first_pet().name)
-print(Pet.last_pet().name)
-print(Pet.num_of_pets())
+# polynom = QuadraticPolynomial.from_iterable([2, 13, -1])
+
+# print(polynom.a)
+# print(polynom.b)
+# print(polynom.c)
+
+polynom = QuadraticPolynomial.from_str("-1.5 4 14.8")
+
+print(polynom.a)
+print(polynom.b)
+print(polynom.c)
+print(polynom.a + polynom.b + polynom.c)

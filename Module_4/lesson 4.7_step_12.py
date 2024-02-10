@@ -1,33 +1,27 @@
-class QuadraticPolynomial:
-    def __init__(self, a, b, c) -> None:
-        self.a = a
-        self.b = b
-        self.c = c
+class Rectangle:
+    def __init__(self, length, width) -> None:
+        self._length = length
+        self._width = width
 
     @classmethod
-    def from_iterable(cls, iterable):
-        return cls(*iterable)
+    def square(cls, side) -> classmethod:
+        return cls(length=side, width=side)
 
-    @classmethod
-    def from_str(cls, string) -> float:
-        return cls(*map(float, string.split()))
+    @property
+    def length(self) -> int | float:
+        return self._length
+
+    @property
+    def width(self) -> int | float:
+        return self._width
 
 
-# polynom = QuadraticPolynomial(1, -5, 6)
+rectangle = Rectangle(4, 5)
 
-# print(polynom.a)
-# print(polynom.b)
-# print(polynom.c)
+print(rectangle.length)
+print(rectangle.width)
 
-# polynom = QuadraticPolynomial.from_iterable([2, 13, -1])
+rectangle = Rectangle.square(5)
 
-# print(polynom.a)
-# print(polynom.b)
-# print(polynom.c)
-
-polynom = QuadraticPolynomial.from_str("-1.5 4 14.8")
-
-print(polynom.a)
-print(polynom.b)
-print(polynom.c)
-print(polynom.a + polynom.b + polynom.c)
+print(rectangle.length)
+print(rectangle.width)
