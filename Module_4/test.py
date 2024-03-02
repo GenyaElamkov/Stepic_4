@@ -1,9 +1,13 @@
-from collections import Counter
+class Cat:
+    def __init__(self, name, breed):
+        self.name = name
+        self.breed = breed
+    
+    def __setattr__(self, attr, value):
+        attr = '_' + attr
+        self.__dict__[attr] = value
 
-def duplicate_encode(word):
-    cnt = Counter(word.lower())
-    return ''.join([')' if cnt[c] > 1 else '(' for c in word.lower() ])
 
+cat = Cat('Кемаль', 'Британский')
 
-
-print(duplicate_encode('Success'))
+print(cat.__dict__)
