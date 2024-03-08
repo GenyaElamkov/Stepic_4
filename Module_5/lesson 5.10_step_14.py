@@ -5,8 +5,8 @@ class Row:
     def __init__(self, **kwargs) -> None:
         self.__dict__.update(kwargs)
 
-    def __getattribute__(self, __name: str):
-        return object.__getattribute__(self, __name)
+    # def __getattribute__(self, __name: str):
+    #     return object.__getattribute__(self, __name)
 
     def __setattr__(self, __name: str, __value) -> None:
         if __name in self.__dict__:
@@ -25,10 +25,10 @@ class Row:
             return OrderedDict(self.__dict__) == OrderedDict(__value.__dict__)
         return NotImplemented
 
-    def __ne__(self, __value: object) -> bool:
-        if isinstance(__value, __class__):
-            return OrderedDict(self.__dict__) != OrderedDict(__value.__dict__)
-        return NotImplemented
+    # def __ne__(self, __value: object) -> bool:
+    #     if isinstance(__value, __class__):
+    #         return OrderedDict(self.__dict__) != OrderedDict(__value.__dict__)
+    #     return NotImplemented
 
     def __hash__(self) -> int:
         return hash(tuple((k, v) for k, v in self.__dict__.items()))
