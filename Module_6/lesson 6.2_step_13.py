@@ -1,0 +1,68 @@
+from itertools import islice
+from copy import deepcopy
+
+
+class SequenceZip:
+    def __init__(self, *args) -> None:
+        self.args = deepcopy(args)
+
+    def __len__(self):
+        return min((len(i) for i in self.args), default=0)
+
+    def __iter__(self):
+        yield from zip(*self.args)
+
+    def __getitem__(self, key):
+        return next(islice(zip(*self.args), key, key + 1))
+
+
+# INPUT DATA:
+
+# TEST_1:
+sequencezip = SequenceZip("ABC", ["bee", "geek", "python"], [1, 2, 3])
+
+print(list(sequencezip))
+print(tuple(sequencezip))
+
+# TEST_2:
+sequencezip = SequenceZip("ABC", ["bee", "geek", "python"], [1, 2, 3])
+
+print(len(sequencezip))
+print(sequencezip[1])
+print(sequencezip[2])
+
+# TEST_3:
+print(len(SequenceZip([1, 2, 3, 4])))
+print(len(SequenceZip(range(5), [1, 2, 3, 4])))
+print(len(SequenceZip(range(5), [1, 2, 4], "data")))
+
+# TEST_4:
+x, y, z = [1, 2, 3], [4, 5, 6], [7, 8, 9]
+sequencezip = SequenceZip(x, y, z)
+
+print(sequencezip[2])
+x[-1], z[-1] = z[-1], x[-1]
+print(sequencezip[2])
+
+# TEST_5:
+many_large_sequences = [range(100000) for _ in range(100)]
+sequencezip = SequenceZip(*many_large_sequences)
+print(sequencezip[99999])
+
+# TEST_6:
+sequencezip = SequenceZip()
+print(len(sequencezip))
+print(list(sequencezip))
+
+# TEST_7:
+data1 = [1, 2, 3, 4, 5]
+data2 = "abcde"
+
+sequencezip = SequenceZip(data1, data2)
+data1.extend([6, 7, 8, 9, 10])
+data2 += "fghij"
+
+print(data1)
+print(data2)
+print(len(sequencezip))
+print(list(sequencezip))
