@@ -1,81 +1,85 @@
+from collections import Counter
+
+
 class OrderedSet:
-    def __init__(self, iterable: set=()) -> None:
-        self.iterable = iterable
+    def __init__(self, iterable: set = ()) -> None:
+        self.iterable = Counter(iterable)
+        self.arg = list(self.iterable.keys())
 
     def add(self, value):
-        set(self.iterable).add(value)
+        self.iterable.update([value])
 
     def discard(self, value):
-        set(self.iterable).discard(value)
+        self.iterable.pop(value, None)
 
     def __len__(self):
-        return len(set(self.iterable))
-    
+        return len(self.iterable)
 
     def __iter__(self):
-        yield from set(self.iterable)
+        yield from self.iterable
+
+    # def __contains__(self, item):
+    #     return item in self.iterable
 
     def __eq__(self, __value: object) -> bool:
         if isinstance(__value, __class__):
-            return self.iterable == __value.iterable
-        
+            return self.arg == __value.arg
+
         if isinstance(__value, set):
-            return self.iterable == __value
+            return set(self.arg) == __value
         return NotImplemented
-    
-    def __ne__(self, __value: object) -> bool:
-        if isinstance(__value, __class__):
-            return self.iterable != __value.iterable
-        
-        if isinstance(__value, set):
-            return self.iterable != __value
-        return NotImplemented
-    
-    def __hash__(self) -> int:
-        return hash(self.iterable)
-    
-# INPUT DATA:
+
+    # def __ne__(self, __value: object) -> bool:
+    #     if isinstance(__value, __class__):
+    #         return self.iterable != __value.iterable
+
+    #     if isinstance(__value, set):
+    #         return self.arg != __value
+    #     return NotImplemented
+
+
+# # INPUT DATA:
 
 # TEST_1:
-orderedset = OrderedSet(['bee', 'python', 'stepik', 'bee', 'geek', 'python', 'bee'])
+orderedset = OrderedSet(["bee", "python", "stepik", "bee", "geek", "python", "bee"])
 
 print(*orderedset)
 print(len(orderedset))
 
 # TEST_2:
-orderedset = OrderedSet(['bee', 'python', 'stepik', 'bee', 'geek', 'python', 'bee'])
+orderedset = OrderedSet(["bee", "python", "stepik", "bee", "geek", "python", "bee"])
 
-print('python' in orderedset)
-print('C++' in orderedset)
+print("python" in orderedset)
+print("C++" in orderedset)
 
 # TEST_3:
 orderedset = OrderedSet()
 
-orderedset.add('green')
-orderedset.add('green')
-orderedset.add('blue')
-orderedset.add('red')
+orderedset.add("green")
+orderedset.add("green")
+orderedset.add("blue")
+orderedset.add("red")
 print(*orderedset)
-orderedset.discard('blue')
-orderedset.discard('white')
+orderedset.discard("blue")
+orderedset.discard("white")
 print(*orderedset)
 
 # TEST_4:
-print(OrderedSet(['green', 'red', 'blue']) == OrderedSet(['green', 'red', 'blue']))
-print(OrderedSet(['green', 'red', 'blue']) == OrderedSet(['red', 'blue', 'green']))
-print(OrderedSet(['green', 'red', 'blue']) == {'blue', 'red', 'green'})
-print(OrderedSet(['green', 'red', 'blue']) == ['green', 'red', 'blue'])
-print(OrderedSet(['green', 'red', 'blue']) == 100)
+print(OrderedSet(["green", "red", "blue"]) == OrderedSet(["green", "red", "blue"]))
+print(OrderedSet(["green", "red", "blue"]) == OrderedSet(["red", "blue", "green"]))
+print(OrderedSet(["green", "red", "blue"]) == {"blue", "red", "green"})
+print(OrderedSet(["green", "red", "blue"]) == ["green", "red", "blue"])
+print(OrderedSet(["green", "red", "blue"]) == 100)
 
 # TEST_5:
-data = ['Ada Lovelace'] * 1000
+data = ["Ada Lovelace"] * 1000
 orderedset = OrderedSet(data)
 
 print(len(orderedset))
 
 # TEST_6:
 orderedset = OrderedSet([1, 2, 3, 4])
-not_supported = [120, {1: 'one'}, True, 'pi = 3', 17.9]
+not_supported = [120, {1: "one"}, True, "pi = 3", 17.9]
 
 for item in not_supported:
     print(item != orderedset)
