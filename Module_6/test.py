@@ -1,15 +1,16 @@
-# (5.00, 5, 10), 5.75]
-
-a = 5.00
-n = 5
-r = 10
-
-res = 5.00 *0.05
-
-print(res)
-
-res = 5.00 * 0.100
+from datetime import datetime
+from typing import NamedTuple
 
 
-res = a + a * (n / 100 ) + a * (r / 100)
-print(round(res, 2))
+class User(NamedTuple):
+    username: str
+    bithday: datetime
+
+
+def get_name(user: User) -> User:
+    return User(username='Genya', bithday=datetime(1984,12,23))
+
+
+user = User
+
+print(get_name(user))
