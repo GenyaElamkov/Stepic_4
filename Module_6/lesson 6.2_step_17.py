@@ -1,20 +1,21 @@
-from logging.config import valid_ident
-import re
-
-
 class HistoryDict:
-    def __init__(self, data: dict={}) -> None:
-        self.data = {k:[v] for k, v in data.items()} or {}
+    def __init__(self, data: dict = {}) -> None:
+        self.data = {k: [v] for k, v in data.items()} or {}
+        self._data = data
 
     def keys(self):
         return list(self.data.keys())
-    
+        # return self.__dict__.keys()
+
     def values(self):
-        return list(self.data.values())
-    
+        return [e for elem in self.data.values() for e in elem]
+        # return self.__dict__.values()
+
     def items(self):
-        return tuple(self.data.items())
-    
+        return tuple((k, *v) for k, v in self.data.items())
+        # return tuple((k, *v) for k, v in self.__dict__.items())
+        return tuple(self._data)
+
     def history(self, key):
         return self.data.get(key, [])
 
@@ -28,7 +29,8 @@ class HistoryDict:
         yield from self.data
 
     def __getitem__(self, key):
-        return self.data[key]
+        # return "".join(map(str, self.data[key]))
+        return self._data[key]
 
     def __setitem__(self, key, value):
         self.data.setdefault(key, []).append(value)
@@ -36,102 +38,143 @@ class HistoryDict:
     def __delitem__(self, key):
         del self.data[key]
 
-        
+
 # INPUT DATA:
 
-# TEST_1:
-historydict = HistoryDict({'ducks': 99, 'cats': 1})
+# # TEST_1:
+# historydict = HistoryDict({"ducks": 99, "cats": 1})
 
-print(historydict['ducks'])
-print(historydict['cats'])
-print(len(historydict))
+# print(historydict["ducks"])
+# print(historydict["cats"])
+# print(len(historydict))
 
-# TEST_2:
-historydict = HistoryDict({'ducks': 99, 'cats': 1})
+# # TEST_2:
+# historydict = HistoryDict({"ducks": 99, "cats": 1})
 
-print(*historydict)
-print(*historydict.keys())
-print(*historydict.values())
-print(*historydict.items())
+# print(*historydict)
+# print(*historydict.keys())
+# print(*historydict.values())
+# print(*historydict.items())
 
-# TEST_3:
-historydict = HistoryDict({'ducks': 99, 'cats': 1})
+# # TEST_3:
+# historydict = HistoryDict({"ducks": 99, "cats": 1})
 
-historydict['ducks'] = 100
-print(historydict.history('ducks'))
-print(historydict.history('cats'))
-print(historydict.history('dogs'))
+# historydict["ducks"] = 100
+# print(historydict.history("ducks"))
+# print(historydict.history("cats"))
+# print(historydict.history("dogs"))
 
 # # TEST_4:
-# historydict = HistoryDict({'ducks': 99, 'cats': 1})
+# historydict = HistoryDict({"ducks": 99, "cats": 1})
 
 # print(historydict.all_history())
-# historydict['ducks'] = 100
-# historydict['ducks'] = 101
-# historydict['cats'] = 2
+# historydict["ducks"] = 100
+# historydict["ducks"] = 101
+# historydict["cats"] = 2
 # print(historydict.all_history())
 
 # # TEST_5:
-# historydict = HistoryDict({'ducks': 99, 'cats': 1})
+# historydict = HistoryDict({"ducks": 99, "cats": 1})
 
-# historydict['dogs'] = 1
+# historydict["dogs"] = 1
 # print(len(historydict))
-# del historydict['ducks']
-# del historydict['cats']
+# del historydict["ducks"]
+# del historydict["cats"]
 # print(len(historydict))
 
-# # TEST_6:
-# d = {'name': 'Иннокентий Елисеевич Архипов', 'age': 34, 'year': 1989}
-# historydict = HistoryDict(d)
+# TEST_6:
+d = {"name": "Иннокентий Елисеевич Архипов", "age": 34, "year": 1989}
+historydict = HistoryDict(d)
 
-# names = ['Регина Ефимовна Костина', 'Мина Викторович Лаврентьев', 'Голубева Юлия Робертовна',
-#          'Чернова Варвара Максимовна', 'Юдин Матвей Иосипович', 'Степанов Мечислав Ерофеевич',
-#          'Абрамов Амос Августович', 'Ольга Егоровна Константинова', 'Хохлов Ираклий Ефимьевич',
-#          'Нестеров Никон Ермилович', 'Третьякова София Юльевна', 'Кудряшова Нина Юльевна', 'Казакова Раиса Феликсовна',
-#          'Александрова Надежда Николаевна', 'Никон Давыдович Васильев', 'Пахом Ильясович Морозов',
-#          'Дмитрий Тихонович Панов', 'Лебедева Галина Валериевна', 'Кузьмина Анастасия Викторовна',
-#          'Севастьян Жанович Якушев']
+names = [
+    "Регина Ефимовна Костина",
+    "Мина Викторович Лаврентьев",
+    "Голубева Юлия Робертовна",
+    "Чернова Варвара Максимовна",
+    "Юдин Матвей Иосипович",
+    "Степанов Мечислав Ерофеевич",
+    "Абрамов Амос Августович",
+    "Ольга Егоровна Константинова",
+    "Хохлов Ираклий Ефимьевич",
+    "Нестеров Никон Ермилович",
+    "Третьякова София Юльевна",
+    "Кудряшова Нина Юльевна",
+    "Казакова Раиса Феликсовна",
+    "Александрова Надежда Николаевна",
+    "Никон Давыдович Васильев",
+    "Пахом Ильясович Морозов",
+    "Дмитрий Тихонович Панов",
+    "Лебедева Галина Валериевна",
+    "Кузьмина Анастасия Викторовна",
+    "Севастьян Жанович Якушев",
+]
 
-# ages = [37, 20, 31, 21, 38, 24, 31, 24, 37, 20, 22, 39, 25, 21, 28, 28, 30, 30, 36, 23]
+ages = [37, 20, 31, 21, 38, 24, 31, 24, 37, 20, 22, 39, 25, 21, 28, 28, 30, 30, 36, 23]
 
-# years = [1986, 2003, 1992, 2002, 1985, 1999, 1992, 1999, 1986, 2003, 2001, 1984, 1998, 2002, 1995, 1995, 1993, 1993,
-#          1987, 2000]
+years = [
+    1986,
+    2003,
+    1992,
+    2002,
+    1985,
+    1999,
+    1992,
+    1999,
+    1986,
+    2003,
+    2001,
+    1984,
+    1998,
+    2002,
+    1995,
+    1995,
+    1993,
+    1993,
+    1987,
+    2000,
+]
 
-# for name, age, year in zip(names, ages, years):
-#     historydict['name'] = name
-#     historydict['age'] = age
-#     historydict['year'] = year
+for name, age, year in zip(names, ages, years):
+    historydict["name"] = name
+    historydict["age"] = age
+    historydict["year"] = year
 
-# print(*historydict.items())
-# print(historydict.history('name'))
-# print(historydict.history('age'))
-# print(historydict.history('year'))
+print(*historydict.items())
+print(historydict.history("name"))
+print(historydict.history("age"))
+print(historydict.history("year"))
 
 # # TEST_7:
 # historydict = HistoryDict()
-# print('Keys:', *historydict.keys())
-# print('Values:', *historydict.values())
-# print('Items:', *historydict.items())
-# print('History(key=1):', historydict.history(1))
-# print('History(key=1):', historydict.history(1))
-# print('All history:', historydict.all_history())
+# print("Keys:", *historydict.keys())
+# print("Values:", *historydict.values())
+# print("Items:", *historydict.items())
+# print("History(key=1):", historydict.history(1))
+# print("History(key=1):", historydict.history(1))
+# print("All history:", historydict.all_history())
 
 # # TEST_8:
-# historydict = HistoryDict({'name': 'Irenica', 'country': 'Russia', 'level': 'junior', })
+# historydict = HistoryDict(
+#     {
+#         "name": "Irenica",
+#         "country": "Russia",
+#         "level": "junior",
+#     }
+# )
 
 # print(historydict.all_history())
 
-# historydict['country'] = 'Italy'
-# historydict['level'] = 'middle'
-# historydict['level'] = 'senior'
+# historydict["country"] = "Italy"
+# historydict["level"] = "middle"
+# historydict["level"] = "senior"
 
 # print(historydict.all_history())
 
-# del historydict['level']
+# del historydict["level"]
 
 # print(historydict.all_history())
 
-# historydict['level'] = 'God'
+# historydict["level"] = "God"
 
 # print(historydict.all_history())
 
