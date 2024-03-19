@@ -1,86 +1,117 @@
 class HistoryDict:
     def __init__(self, data: dict = {}) -> None:
         self.data = {k: [v] for k, v in data.items()} or {}
-        self._data = data
 
-    def keys(self):
+    def keys(self) -> list:
         return list(self.data.keys())
-        # return self.__dict__.keys()
 
-    def values(self):
+    def values(self) -> list:
         return [e for elem in self.data.values() for e in elem]
-        # return self.__dict__.values()
 
     def items(self):
-        return tuple((k, *v) for k, v in self.data.items())
-        # return tuple((k, *v) for k, v in self.__dict__.items())
-        return tuple(self._data)
+        return ((k, v[-1]) for k, v in self.data.items())
 
-    def history(self, key):
+    def history(self, key) -> list:
         return self.data.get(key, [])
 
-    def all_history(self):
+    def all_history(self) -> dict:
         return self.data
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.data)
 
     def __iter__(self):
         yield from self.data
 
-    def __getitem__(self, key):
-        # return "".join(map(str, self.data[key]))
-        return self._data[key]
+    def __getitem__(self, key) -> list:
+        for elem in self.data[key]:
+            return elem
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key, value) -> None:
         self.data.setdefault(key, []).append(value)
 
-    def __delitem__(self, key):
+    def __delitem__(self, key) -> None:
         del self.data[key]
+
+# class HistoryDict:
+#     def __init__(self, data=()):
+#         self._data = dict(data) or {}
+#         self._history = {key: [value] for key, value in self._data.items()}
+
+#     def keys(self):
+#         return self._data.keys()
+
+#     def values(self):
+#         return self._data.values()
+
+#     def items(self):
+#         return self._data.items()
+
+#     def history(self, key):
+#         return self._history.get(key, [])
+
+#     def all_history(self):
+#         return self._history
+
+#     def __len__(self):
+#         return len(self._data)
+
+#     def __iter__(self):
+#         return iter(self.keys())
+
+#     def __delitem__(self, key):
+#         del self._data[key]
+#         del self._history[key]
+
+#     def __setitem__(self, key, value):
+#         self._history.setdefault(key, []).append(value)
+#         self._data[key] = value
+
+#     def __getitem__(self, key):
+#         return self._data[key]
 
 
 # INPUT DATA:
 
-# # TEST_1:
-# historydict = HistoryDict({"ducks": 99, "cats": 1})
+# TEST_1:
+historydict = HistoryDict({"ducks": 99, "cats": 1})
+print(historydict["ducks"])
+print(historydict["cats"])
+print(len(historydict))
 
-# print(historydict["ducks"])
-# print(historydict["cats"])
-# print(len(historydict))
+# TEST_2:
+historydict = HistoryDict({"ducks": 99, "cats": 1})
 
-# # TEST_2:
-# historydict = HistoryDict({"ducks": 99, "cats": 1})
+print(*historydict)
+print(*historydict.keys())
+print(*historydict.values())
+print(*historydict.items())
 
-# print(*historydict)
-# print(*historydict.keys())
-# print(*historydict.values())
-# print(*historydict.items())
+# TEST_3:
+historydict = HistoryDict({"ducks": 99, "cats": 1})
 
-# # TEST_3:
-# historydict = HistoryDict({"ducks": 99, "cats": 1})
+historydict["ducks"] = 100
+print(historydict.history("ducks"))
+print(historydict.history("cats"))
+print(historydict.history("dogs"))
 
-# historydict["ducks"] = 100
-# print(historydict.history("ducks"))
-# print(historydict.history("cats"))
-# print(historydict.history("dogs"))
+# TEST_4:
+historydict = HistoryDict({"ducks": 99, "cats": 1})
 
-# # TEST_4:
-# historydict = HistoryDict({"ducks": 99, "cats": 1})
+print(historydict.all_history())
+historydict["ducks"] = 100
+historydict["ducks"] = 101
+historydict["cats"] = 2
+print(historydict.all_history())
 
-# print(historydict.all_history())
-# historydict["ducks"] = 100
-# historydict["ducks"] = 101
-# historydict["cats"] = 2
-# print(historydict.all_history())
+# TEST_5:
+historydict = HistoryDict({"ducks": 99, "cats": 1})
 
-# # TEST_5:
-# historydict = HistoryDict({"ducks": 99, "cats": 1})
-
-# historydict["dogs"] = 1
-# print(len(historydict))
-# del historydict["ducks"]
-# del historydict["cats"]
-# print(len(historydict))
+historydict["dogs"] = 1
+print(len(historydict))
+del historydict["ducks"]
+del historydict["cats"]
+print(len(historydict))
 
 # TEST_6:
 d = {"name": "Иннокентий Елисеевич Архипов", "age": 34, "year": 1989}
@@ -144,44 +175,44 @@ print(historydict.history("name"))
 print(historydict.history("age"))
 print(historydict.history("year"))
 
-# # TEST_7:
-# historydict = HistoryDict()
-# print("Keys:", *historydict.keys())
-# print("Values:", *historydict.values())
-# print("Items:", *historydict.items())
-# print("History(key=1):", historydict.history(1))
-# print("History(key=1):", historydict.history(1))
-# print("All history:", historydict.all_history())
+# TEST_7:
+historydict = HistoryDict()
+print("Keys:", *historydict.keys())
+print("Values:", *historydict.values())
+print("Items:", *historydict.items())
+print("History(key=1):", historydict.history(1))
+print("History(key=1):", historydict.history(1))
+print("All history:", historydict.all_history())
 
-# # TEST_8:
-# historydict = HistoryDict(
-#     {
-#         "name": "Irenica",
-#         "country": "Russia",
-#         "level": "junior",
-#     }
-# )
+# TEST_8:
+historydict = HistoryDict(
+    {
+        "name": "Irenica",
+        "country": "Russia",
+        "level": "junior",
+    }
+)
 
-# print(historydict.all_history())
+print(historydict.all_history())
 
-# historydict["country"] = "Italy"
-# historydict["level"] = "middle"
-# historydict["level"] = "senior"
+historydict["country"] = "Italy"
+historydict["level"] = "middle"
+historydict["level"] = "senior"
 
-# print(historydict.all_history())
+print(historydict.all_history())
 
-# del historydict["level"]
+del historydict["level"]
 
-# print(historydict.all_history())
+print(historydict.all_history())
 
-# historydict["level"] = "God"
+historydict["level"] = "God"
 
-# print(historydict.all_history())
+print(historydict.all_history())
 
-# # TEST_9:
-# d = dict.fromkeys(range(100), None)
-# attrdict = HistoryDict(d)
-# print(*attrdict)
+# TEST_9:
+d = dict.fromkeys(range(100), None)
+attrdict = HistoryDict(d)
+print(*attrdict)
 
-# d[100] = None
-# print(*attrdict)
+d[100] = None
+print(*attrdict)
