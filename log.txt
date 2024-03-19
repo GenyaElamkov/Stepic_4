@@ -1,0 +1,4 @@
+2022-01-01 INFO: User logged in
+2022-01-01 ERROR: Invalid input data
+2022-01-02 INFO: User logged out
+2022-01-03 INFO: User registered
