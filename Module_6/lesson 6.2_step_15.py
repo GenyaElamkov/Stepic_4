@@ -1,60 +1,28 @@
-class AttrDict:
-    def __init__(self, data: dict = {}) -> None:
-        self.data = dict(data)
-        self.__dict__.update(self.data)
+class Closer:
+    def __init__(self, obj) -> None:
+        self.obj = obj
 
-    def __len__(self):
-        return len(self.data)
+    def __enter__(self):
+        return self.obj
 
-    def __iter__(self):
-        yield from self.data
+    def __exit__(self, *args, **kwargs)-> None:
+        try:
+            self.closed()
+        except AttributeError:
+            print("Незакрываемый объект")
 
-    def __getitem__(self, value):
-        return self.data[value]
-
-    def __setitem__(self, key, value):
-        self.data[key] = value
-        if key in self.data:
-            self.__dict__[key] = value
+    def closed(self)-> None:
+        self.obj.close()
 
 
-# INPUT DATA:
+output = open("output.txt", "w", encoding="utf-8")
 
-# TEST_1:
-attrdict = AttrDict({"name": "X Æ A-12", "father": "Elon Musk"})
+with Closer(output) as file:
+    print(file.closed)
 
-print(attrdict["name"])
-print(attrdict.father)
-print(len(attrdict))
+print(file.closed)
 
-# TEST_2:
-attrdict = AttrDict({"name": "Timur", "city": "Moscow"})
+with Closer(5) as i:
+    i += 1
 
-attrdict["city"] = "Dubai"
-attrdict["age"] = 31
-print(attrdict.city)
-print(attrdict.age)
-
-# TEST_3:
-attrdict = AttrDict()
-
-attrdict["school_name"] = "BEEGEEK"
-print(attrdict["school_name"])
-print(attrdict.school_name)
-
-# TEST_4:
-d = AttrDict()
-d.name = "Leonardo da Vinci"
-
-try:
-    print(d["name"])
-except KeyError:
-    print("Ключ отсутствует")
-
-# TEST_5:
-d = dict.fromkeys(range(100), None)
-attrdict = AttrDict(d)
-print(*attrdict)
-
-d[100] = None
-print(*attrdict)
+print(i)
