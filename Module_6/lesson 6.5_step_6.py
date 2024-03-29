@@ -16,7 +16,3 @@ class Greeter:
 
     def __exit__(self, *args, **kwargs):
         print(f"До встречи, {self.name}!")
-
-
-with Greeter("Кейв") as greeter:
-    print(greeter.name)

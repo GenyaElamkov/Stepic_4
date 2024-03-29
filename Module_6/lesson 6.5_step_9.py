@@ -1,20 +1,64 @@
-import sys
+class Reloopable:
+    def __init__(self, file) -> None:
+        self.file = file
 
-
-class UpperPrint:
     def __enter__(self):
-        self.old_stdout = sys.stdout.write
-        sys.stdout.write = lambda x: self.old_stdout(x.upper())
+        return self.file.readlines()
 
     def __exit__(self, *args, **kwargs):
-        sys.stdout.write = self.old_stdout
+        self.file.close()
 
 
-print("Если жизнь одаривает вас лимонами — не делайте лимонад")
-print("Заставьте жизнь забрать их обратно!")
+# INPUT DATA:
 
-with UpperPrint():
-    print("Мне не нужны твои проклятые лимоны!")
-    print("Что мне с ними делать?")
+# TEST_1:
+with open('file.txt', 'w') as file:
+    file.write('Evil is evil\n')
+    file.write('Lesser, greater, middling\n')
+    file.write('Makes no difference\n')
+    
+with Reloopable(open('file.txt')) as reloopable:
+    for line in reloopable:
+        print(line.strip())
+    for line in reloopable:
+        print(line.strip())
 
-print("Требуйте встречи с менеджером, отвечающим за жизнь!")
+# TEST_2:
+with open('file.txt', 'w') as file:
+    pass
+    
+file = open('file.txt')
+print(file.closed)
+
+with Reloopable(file) as reloopable:
+    pass
+
+print(file.closed)
+
+# TEST_3:
+with open('file.txt', 'w') as file:
+    print('Есть всего два типа языков программирования: те, на которые люди всё время ругаются, и те, которые никто не использует.', file=file)
+
+file = open('file.txt')
+
+with Reloopable(file) as reloopable:
+    for _ in range(20):
+        for line in reloopable:
+            print(line.strip())
+
+# TEST_4:
+files = ['file1.txt', 'file2.txt', 'file3.txt', 'file4.txt', 'file5.txt', 'file6.txt', 'file7.txt', 'file8.txt',
+         'file9.txt', 'file10.txt', 'file11.txt', 'file12.txt', 'file13.txt', 'file14.txt', 'file15.txt', 'file16.txt',
+         'file17.txt', 'file18.txt', 'file19.txt', 'file20.txt']
+
+for file in files:
+    with open(file, 'w') as f:
+        pass
+
+    f = open(file)
+    print(f.closed)
+
+    with Reloopable(f) as reloopable:
+        pass
+
+    print(f.closed)
