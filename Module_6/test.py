@@ -1,13 +1,16 @@
-class Trace:
-    def __enter__(self):
-        print('Начало выполнения блока with')
+res = []
+if not res:
+    res.append([5])
 
-    def __exit__(self, exc_type, exc_value, traceback):
-        if exc_value:
-            print(f'Во время выполнения блока with было возбуждено исключение {exc_value}')
-        print('Конец выполнения блока with')
-        return True                           # обрабатываем все типы исключений
-    
-with Trace():
-    print(1/0)
-    print('Python generation!')
+
+res[-1].append(1)
+res[-1][-1].append([2])
+res[-1][-1][-1].append([3])
+res[-1][-1][-1][-1].append([4])
+
+
+res.append([5])
+
+
+print(res)
+
