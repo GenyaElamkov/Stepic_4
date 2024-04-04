@@ -23,6 +23,24 @@ class TreeBuilder:
             return self.node[0]
         return []
 
+# class TreeBuilder:
+#     def __init__(self) -> None:
+#         self.node = [[]]
+
+#     def __enter__(self):
+#         self.node.append([])
+
+#     def __exit__(self, *args):
+#         if self.node[-1]:
+#             self.node[-2].append(self.node[-1])
+#         self.node.pop()
+
+#     def add(self, sheet):
+#         self.node[-1].append(sheet)
+
+#     def structure(self):
+#         return self.node[-1]
+
     # [[1, [2, [3, [4]]]], 5]
 # INPUT DATA:
 
