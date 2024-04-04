@@ -1,6 +1,3 @@
-from tkinter import NO
-
-
 class TreeBuilder:
     def __init__(self) -> None:
         self.node = {}
