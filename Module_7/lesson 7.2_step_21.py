@@ -34,7 +34,7 @@ class FieldTracker:
 
 #     def has_changed(self, field):
 #         return self._values[field] != getattr(self, field)
-
+    
 #     def changed(self):
 #         return {
 #             field: self.base(field)
