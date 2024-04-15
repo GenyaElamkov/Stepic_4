@@ -1,38 +1,54 @@
 from collections import UserString
-from typing import Any
+
+
+# class MutableString(UserString):
+
+#     def __setitem__(self, index, value):
+#         self.data = list(self.data)
+#         self.data[index] = value
+#         self.data = "".join(map(str, self.data))
+
+#     def __delitem__(self, index):
+#         self.data = self.data[:index] + self.data[index + 1 :]
+
+#     def lower(self):
+#         self.data = super().lower()
+#         return self.data
+
+#     def upper(self):
+#         self.data = super().upper()
+#         return self.data
+
+#     def sort(self, key: None = None, reverse: bool = False):
+#         res = sorted(self.data, key=lambda key: str(key), reverse=reverse)
+#         self.data = "".join(map(str, res))
+
 
 
 class MutableString(UserString):
-    # def __init__(self, seq: object) -> None:
-    #     super().__init__(seq)
-
     def __setitem__(self, index, value):
-        self.data = list(self.data)
-        self.data[index] = value
-        self.data = "".join(map(str, self.data))
+        data_as_list = list(self.data)
+        data_as_list[index] = value
+        self.data = "".join(data_as_list)
 
     def __delitem__(self, index):
-        self.data = self.data[:index] + self.data[index + 1 :]
-
-    def lower(self):
-        self.data = super().lower()
-        return self.data
+        data_as_list = list(self.data)
+        del data_as_list[index]
+        self.data = "".join(data_as_list)
 
     def upper(self):
-        self.data = super().upper()
-        return self.data
+        self.data = self.data.upper()
 
-    def sort(self, key: None = None, reverse: bool = False):
-        self.data[:] = list(self.data)
-        res = sorted(self.data, key=key, reverse=reverse)
-        print(res)
-        # self.data = "".join(map(str, res))
+    def lower(self):
+        self.data = self.data.lower()
 
+    def sort(self, key=None, reverse=False):
+        self.data = "".join(sorted(self.data, key=key, reverse=reverse))
 
 # INPUT DATA:
 
 # TEST_1:
-mutablestring = MutableString('Beegeek')
+mutablestring = MutableString("Beegeek")
 
 mutablestring.lower()
 print(mutablestring)
@@ -50,22 +66,109 @@ print(mutablestring)
 # print(mutablestring)
 
 # TEST_3:
-words = ['improve', 'north', 'now', 'there', 'outside', 'set', 'into', 'time', 'campaign', 'onto', 'change', 'source',
-         'use', 'huge', 'specific', 'consumer', 'speak', 'card', 'century', 'late', 'focus', 'money', 'successful',
-         'myself', 'available', 'rise', 'no', 'charge', 'hit', 'friend', 'cost', 'billion', 'financial', 'model',
-         'decade', 'whole', 'space', 'service', 'agreement', 'home', 'represent', 'away', 'describe', 'plan', 'drop',
-         'dream', 'leg', 'mouth', 'interesting', 'provide', 'indeed', 'thing', 'practice', 'miss', 'bring', 'important',
-         'court', 'talk', 'true', 'conference', 'tell', 'issue', 'identify', 'hand', 'appear', 'stuff', 'run',
-         'present', 'good', 'region', 'detail', 'recognize', 'international', 'behavior', 'attack', 'politics', 'great',
-         'baby', 'measure', 'whether', 'yard', 'with', 'pressure', 'role', 'eight', 'man', 'she', 'four', 'them',
-         'adult', 'clear', 'marriage', 'meeting', 'notice']
+words = [
+    "improve",
+    "north",
+    "now",
+    "there",
+    "outside",
+    "set",
+    "into",
+    "time",
+    "campaign",
+    "onto",
+    "change",
+    "source",
+    "use",
+    "huge",
+    "specific",
+    "consumer",
+    "speak",
+    "card",
+    "century",
+    "late",
+    "focus",
+    "money",
+    "successful",
+    "myself",
+    "available",
+    "rise",
+    "no",
+    "charge",
+    "hit",
+    "friend",
+    "cost",
+    "billion",
+    "financial",
+    "model",
+    "decade",
+    "whole",
+    "space",
+    "service",
+    "agreement",
+    "home",
+    "represent",
+    "away",
+    "describe",
+    "plan",
+    "drop",
+    "dream",
+    "leg",
+    "mouth",
+    "interesting",
+    "provide",
+    "indeed",
+    "thing",
+    "practice",
+    "miss",
+    "bring",
+    "important",
+    "court",
+    "talk",
+    "true",
+    "conference",
+    "tell",
+    "issue",
+    "identify",
+    "hand",
+    "appear",
+    "stuff",
+    "run",
+    "present",
+    "good",
+    "region",
+    "detail",
+    "recognize",
+    "international",
+    "behavior",
+    "attack",
+    "politics",
+    "great",
+    "baby",
+    "measure",
+    "whether",
+    "yard",
+    "with",
+    "pressure",
+    "role",
+    "eight",
+    "man",
+    "she",
+    "four",
+    "them",
+    "adult",
+    "clear",
+    "marriage",
+    "meeting",
+    "notice",
+]
 
 for word in words:
     mutablestring = MutableString(word)
-    print(mutablestring, end=' ')
+    print(mutablestring, end=" ")
 
     mutablestring.upper()
-    print(mutablestring, end=' ')
+    print(mutablestring, end=" ")
 
     mutablestring.sort(key=lambda char: ord(char), reverse=True)
     print(mutablestring)
