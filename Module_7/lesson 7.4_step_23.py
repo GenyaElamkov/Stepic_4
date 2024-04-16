@@ -1,4 +1,5 @@
 from collections import UserString
+from typing import Any
 
 
 # class MutableString(UserString):
@@ -24,26 +25,83 @@ from collections import UserString
 #         self.data = "".join(map(str, res))
 
 
-
 class MutableString(UserString):
-    def __setitem__(self, index, value):
+    def __setitem__(self, index: int, value: Any) -> None:
+        """
+        Устанавливает значение в указанном индексе в списке данных.
+
+        Параметры:
+            index (int): Индекс элемента, который нужно обновить.
+            value (любой тип): Новое значение, которое нужно присвоить элементу.
+
+        Возвращает:
+            None
+        """
         data_as_list = list(self.data)
         data_as_list[index] = value
         self.data = "".join(data_as_list)
 
-    def __delitem__(self, index):
+    def __delitem__(self, index: int) -> None:
+        """
+        Удаляет элемент из объекта MutableString по указанному индексу.
+
+        Параметры:
+            index (int): Индекс элемента, который нужно удалить.
+
+        Возвращает:
+            None
+        """
         data_as_list = list(self.data)
         del data_as_list[index]
         self.data = "".join(data_as_list)
 
-    def upper(self):
+    def upper(self) -> None:
+        """
+        Преобразует данные объекта MutableString в верхний регистр.
+
+        Этот метод обновляет атрибут `data` объекта MutableString, вызывая метод `upper()` для него.
+        Метод `upper()` преобразует все символы в строке `data` в верхний регистр.
+
+        Параметры:
+            None
+
+        Возвращает:
+            None
+        """
         self.data = self.data.upper()
 
-    def lower(self):
+    def lower(self) -> None:
+        """
+        Устанавливает атрибут data объекта MutableString в нижний регистр.
+
+        Этот метод преобразует все символы в атрибуте data объекта MutableString в нижний регистр.
+
+        Параметры:
+            self (MutableString): Объект MutableString.
+
+        Возвращает:
+            None
+        """
         self.data = self.data.lower()
 
-    def sort(self, key=None, reverse=False):
+    def sort(self, key=None, reverse=False) -> None:
+        """
+        Сортирует данные объекта MutableString.
+
+        Этот метод сортирует данные объекта MutableString, преобразуя их в список, сортируя список с использованием
+        указанной функции `key` (если она предоставлена) и флага `reverse`, а затем объединяя отсортированный список
+        обратно в строку. Отсортированные данные затем присваиваются атрибуту `data` объекта MutableString.
+
+        Параметры:
+            key (callable, optional): Функция, которая принимает элемент данных и возвращает ключ для сортировки.
+                По умолчанию равно None.
+            reverse (bool, optional): Если True, список сортируется в порядке убывания. По умолчанию равно False.
+
+        Возвращает:
+            None
+        """
         self.data = "".join(sorted(self.data, key=key, reverse=reverse))
+
 
 # INPUT DATA:
 
