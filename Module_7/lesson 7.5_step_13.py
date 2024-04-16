@@ -14,8 +14,8 @@ class Validator(ABC):
         raise AttributeError("Атрибут не найден")
 
     def __set__(self, obj, value):
-        if self.validate(value):
-            obj.__dict__[self._attr] = value
+        self.validate(value)
+        obj.__dict__[self._attr] = value
 
     @abstractclassmethod
     def validate(self, value):
@@ -40,8 +40,6 @@ class Number(Validator):
             raise ValueError(
                 f"Устанавливаемое число должно быть меньше или равно {self.maxvalue}"
             )
-
-        return True
 
 
 class String(Validator):
@@ -68,8 +66,6 @@ class String(Validator):
             raise ValueError(
                 "Устанавливаемая строка не удовлетворяет дополнительным условиям"
             )
-
-        return True
 
 
 # INPUT DATA:
