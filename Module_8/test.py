@@ -1,43 +1,21 @@
-from functools import wraps
-from typing import Any
+import functools
 
-# def counter(n: int):
-#     def decorator(func):
-#         @wraps(func)
-#         def wrapper(*args, **kwargs):
-#             for _ in range(n):
-#                 val = func(*args, **kwargs)
-#             return val
-#         return wrapper
-#     return decorator
-
-# class Cat:
-#     def __init__(self, name) -> None:
-#         self.name = name
+def add_attr_to_instances(cls):
+    old_init = cls.__init__             # сохраняем исходный инициализатор
     
-#     @counter(10)
-#     def go_home(self):
-#         print(self.name)
+    @functools.wraps(old_init)
+    def new_init(self, *args, **kwargs):
+        old_init(self, *args, **kwargs) # вызываем исходный инициализатор
+        self.attr = None                # добавляем экземпляру класса атрибут attr
+    
+    cls.__init__ = new_init             # заменяем исходный инициализатор новым
+    return cls
+
+@add_attr_to_instances
+class MyClass:
+    pass
 
 
-# cat = Cat('Kitte')
-# cat.go_home()
+obj = MyClass()
 
-
-class Cat:
-    def __init__(self, func, n) -> None:
-        self.func = func
-        self.n = n
-
-
-    def __call__(self, *args: Any, **kwds: Any) -> Any:
-        for _ in range(self.n):
-            val = self.func(*args, **kwds)
-        return val
-
-def cat(name):
-    print(name)
-
-
-cats =  Cat(cat, 10)
-cats('Kitty')
+print(obj.attr)

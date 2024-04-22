@@ -12,6 +12,7 @@ class type_check:
                 if not isinstance(arg, typs):
                     raise TypeError
             return func(*args, **kwargs)
+
         return wrapper
 
 
