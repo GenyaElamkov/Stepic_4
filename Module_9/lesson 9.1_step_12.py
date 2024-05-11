@@ -1,131 +1,119 @@
-from copy import deepcopy
+from collections import UserDict
 
+class MultiKeyDict(UserDict):
+    def __init__(self, *args, **kwargs):
+        self.d_alias = {}
+        super().__init__(*args, **kwargs)
 
-class Selfie:
-    def __init__(self) -> None:
-        self.save_obj = {}
-        self.key = 0
+    def __getitem__(self, key):
+        if key in self.data:
+            return self.data[key]
+        if key in self.d_alias:
+            return self.d_alias[key][0]
+        raise KeyError
 
-    def save_state(self):
-        self.save_obj.setdefault(self.key, deepcopy(self))
-        self.key += 1
+    def __setitem__(self, key, item) -> None:
+        key_old = key
+        if key in self.d_alias:
+            lst = list(self.d_alias[key])
+            lst[0] = item
+            key_old = lst[1]
+        for k, v in self.d_alias.items():
+            if key_old == v[1]:
+                res = list(self.d_alias[k])
+                res[0] = item
+                self.d_alias[k] = tuple(res)
 
-    def recover_state(self, index):
-        try:
-            return self.save_obj[index]
-        except KeyError:
-            return self
+        self.data[key_old] = item
 
-    def n_states(self):
-        return self.key
+    def __delitem__(self, key) -> None:
+        return super().__delitem__(key)
+
+    def alias(self, key, alias):
+        self.d_alias[alias] = (self.data[key], key)
 
 
 # INPUT DATA:
 
-# # TEST_1:
-# obj = Selfie()
+# TEST_1:
+multikeydict = MultiKeyDict(x=100, y=[10, 20])
 
-# obj.x = 1
-# obj.y = 2
+multikeydict.alias("x", "z")
+multikeydict.alias("x", "t")
+print(multikeydict["z"])
+multikeydict["t"] += 1
+print(multikeydict["x"])
 
-# print(obj.x)
-# print(obj.y)
+multikeydict.alias("y", "z")
+multikeydict["z"] += [30]
+print(multikeydict["y"])
 
-# obj.save_state()
-# obj.x = 0
-# obj.y = 0
-# print(obj.x)
-# print(obj.y)
+# TEST_2:
+multikeydict = MultiKeyDict(x=100)
 
-# obj = obj.recover_state(0)
-# print(obj.x)
-# print(obj.y)
+multikeydict.alias("x", "z")
+del multikeydict["x"]
+print(multikeydict["z"])
 
-# # TEST_2:
-# obj = Selfie()
+try:
+    print(multikeydict["x"])
+except KeyError:
+    print("Ключ отстутствует")
 
-# print(obj.n_states())
-# obj.x = 0
-# obj.save_state()
-# obj.x = 1
-# obj.save_state()
-# obj.x = 2
-# obj.save_state()
-# print(obj.n_states())
+# TEST_3:
+multikeydict = MultiKeyDict(x=100, y=[10, 20])
 
-# # TEST_3:
-# from string import ascii_lowercase
+multikeydict.alias("x", "y")
+print(multikeydict["y"])
 
-# obj = Selfie()
-# for char in ascii_lowercase:
-#     obj.__dict__[char] = ord(char)
+multikeydict["y"] += [30]
+print(multikeydict["y"])
 
-# print(*(obj.__dict__[char] for char in ascii_lowercase))
-# obj.save_state()
+# TEST_4:
+multikeydict = MultiKeyDict(lecture="python", lesson="object oriented programming")
 
-# for char in ascii_lowercase:
-#     obj.__dict__[char] = ord(char) + 100
+multikeydict.alias("lecture", "lesson")
+print(multikeydict["lesson"])
 
-# print(*(obj.__dict__[char] for char in ascii_lowercase))
-# obj = obj.recover_state(0)
+multikeydict.alias("lecture", "lesson")
+print(multikeydict["lesson"])
 
-# print(*(obj.__dict__[char] for char in ascii_lowercase))
-
-# # TEST_4:
-# def sum_a_b(a, b):
-#     return a + b
-
-
-# def sub_a_b(a, b):
-#     return a - b
-
-
-# def mul_a_d(a, b):
-#     return a * b
-
-
-# def truediv_a_b(a, b):
-#     return a / b
-
-
-# obj = Selfie()
-# obj.sum_a_b = sum_a_b
-# print(obj.sum_a_b(1, 2))
-# obj.save_state()
-
-# obj.sub_a_b = sub_a_b
-# print(obj.sub_a_b(1, 2))
-# obj.save_state()
-
-# obj.mul_a_d = mul_a_d
-# print(obj.mul_a_d(1, 2))
-# obj.save_state()
-
-# obj.truediv_a_b = truediv_a_b
-# print(obj.truediv_a_b(1, 2))
-# obj.save_state()
-
-# print(obj.n_states())
-# obj = obj.recover_state(1)
-
-# print(obj.n_states())
+del multikeydict["lesson"]
+print(multikeydict["lesson"])
 
 # TEST_5:
-obj = Selfie()
+mkey = MultiKeyDict(x=1)
+mkey.alias("x", "y")
+mkey.alias("x", "z")
+print(mkey["x"], mkey["y"], mkey["z"])
+mkey["x"] += 1
+print(mkey["x"], mkey["y"], mkey["z"])
 
-obj.x = 1
-obj.y = 2
+# TEST_6:
+mkey = MultiKeyDict(x=1)
+mkey.alias("x", "y")
+mkey.alias("x", "z")
+print(mkey["x"], mkey["y"], mkey["z"])
+mkey["y"] += 1
+print(mkey["x"], mkey["y"], mkey["z"])
 
-print(obj.x)
-print(obj.y)
+# TEST_7:
+multikeydict1 = MultiKeyDict(x=1, y=2, z=3)
+multikeydict2 = MultiKeyDict([("x", 1), ("y", 2), ("z", 3)])
 
-obj.x = 100
-obj.y = 100
+print(multikeydict1["x"])
+print(multikeydict1["y"])
+print(multikeydict2["z"])
 
-obj.save_state()
-print(obj.x)
-print(obj.y)
+multikeydict1["a"] = 4
+print(multikeydict1["a"])
 
-obj = obj.recover_state(7)
-print(obj.x)
-print(obj.y)
+# TEST_8:
+multikeydict = MultiKeyDict(x=100)
+
+multikeydict.alias("x", "z")
+multikeydict.alias("x", "t")
+del multikeydict["x"]
+multikeydict["z"] += 1
+print(multikeydict["z"])
+print(multikeydict["t"])
